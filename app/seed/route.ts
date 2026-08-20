@@ -103,6 +103,8 @@ async function seedRevenue() {
 
 export async function GET() {
   try {
+    await sql`CREATE EXTENSION IF NOT EXISTS "uuid-ossp"`;
+
     const result = await sql.begin((sql) => [
       seedUsers(),
       seedCustomers(),
@@ -112,6 +114,6 @@ export async function GET() {
 
     return Response.json({ message: 'Database seeded successfully' });
   } catch (error) {
-    return Response.json({ error }, { status: 500 });
+    return Response.json({ error: String(error) }, { status: 500 });
   }
 }
